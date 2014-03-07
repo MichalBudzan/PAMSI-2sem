@@ -1,4 +1,3 @@
-
 #include "stdafx.h"
 #include <iostream>
 #include <fstream>
@@ -15,9 +14,9 @@ using namespace std;
 /*!
  *\brief  Definicja klasy Liczby  
  * 
- * Obiekty tej klasy reprezentuj¹ wczytane liczby z pliku .txt.
- * Sk³adaj¹ siê z dwóch pól, zmiennej informuj¹cej o iloœci wczytywanych liczb oraz z tablicy, 
- * w której s¹ one przechowywane. 
+ * Obiekty tej klasy reprezentujï¿½ wczytane liczby z pliku .txt.
+ * Skï¿½adajï¿½ siï¿½ z dwï¿½ch pï¿½l, zmiennej informujï¿½cej o iloï¿½ci wczytywanych liczb oraz z tablicy, 
+ * w ktï¿½rej sï¿½ one przechowywane. 
  *                      
  * 
  */ 
@@ -26,26 +25,26 @@ class Liczby {
 	private:
 	
 	/*!
-	 * Pole przechowuje informacjê o iloœci wczytanych liczb
+	 * Pole przechowuje informacjï¿½ o iloï¿½ci wczytanych liczb
 	 */ 
 	int ilosc;
 	/*!
 	 * Tablica zawiera wczytane liczby z pliku .txt
-	 * Dyrektywa przeprocesora ROZMIAR, ogranicza maksymaln¹ iloœæ wczytanych liczb.
-	 * Jej wartoœæ mo¿na zmieniaæ, w zale¿noœci od potrzeb. 
+	 * Dyrektywa przeprocesora ROZMIAR, ogranicza maksymalnï¿½ iloï¿½ï¿½ wczytanych liczb.
+	 * Jej wartoï¿½ï¿½ moï¿½na zmieniaï¿½, w zaleï¿½noï¿½ci od potrzeb. 
 	 */ 
 	int * tablica;
 		
 	public :
 	
 /*!
-*\return Zwraca wartoœæ pola rozmiar klasy Liczby.
+*\return Zwraca wartoï¿½ï¿½ pola rozmiar klasy Liczby.
 * 
 */ 
 int IloscLiczb() { return ilosc; }
 	
 /*!
- * Modyfikuje wartoœæ pola rozmiar w klasie Liczby. 
+ * Modyfikuje wartoï¿½ï¿½ pola rozmiar w klasie Liczby. 
  *
  */  	
 void ZapiszIloscLiczb ( int ile ) { ilosc=ile; } 
@@ -59,8 +58,8 @@ int Tablica(int indeks) { return tablica[indeks]; }
 
 
 /*!
- * Metoda przypisuje wartoœæ odpowiedniemu elementowi tablicy tab_liczb.
- * U¿ywana podczas wczytywania liczb z pliku .txt
+ * Metoda przypisuje wartoï¿½ï¿½ odpowiedniemu elementowi tablicy tab_liczb.
+ * Uï¿½ywana podczas wczytywania liczb z pliku .txt
  * 
  */ 
 void Tablica(const int index,int wartosc) {  
@@ -82,10 +81,10 @@ Liczby(int rozmiar);
 
 
 /*!
- *\brief  Wyœwietlanie liczb 
+ *\brief  Wyï¿½wietlanie liczb 
  * 
- * Zadaniem funkcji jest wyœwietlenie liczb na wyjœcie. S¹ zapisane w obiekcie klasy Liczby,
- * który jest parametrem jej wywo³ania.
+ * Zadaniem funkcji jest wyï¿½wietlenie liczb na wyjï¿½cie. Sï¿½ zapisane w obiekcie klasy Liczby,
+ * ktï¿½ry jest parametrem jej wywoï¿½ania.
  * 
  */ 
 int WyswietlLiczby();
@@ -124,24 +123,24 @@ int ZamienMiejscami ( int i , int j);
 
 
 /*!
- *\brief  Wymna¿anie liczb 
+ *\brief  Wymnaï¿½anie liczb 
  * 
- * Zadaniem funkcji jest wymno¿enie wczytanych liczb z pliku .txt przez stala przekazana
+ * Zadaniem funkcji jest wymnoï¿½enie wczytanych liczb z pliku .txt przez stala przekazana
  * jako parametr wywolania funkcji.
- * Wyniki przechowywane s¹ w obiekcie klasy Liczby.
+ * Wyniki przechowywane sï¿½ w obiekcie klasy Liczby.
  */ 
 int WymnozLiczby(int razy);
 
 
 
 /*!
- *\brief Sprawdzenie wyników mno¿enia 
+ *\brief Sprawdzenie wynikï¿½w mnoï¿½enia 
  * 
- * Uzyskane wyniki, s¹ porównywane z liczbami zawartymi w drugim pliku .txt.
- * Odpowiadaj¹ one poprawnym wynikom. Funkcja sprawdza czy wszystko siê zgadza, informuj¹c  
- * o rezultacie u¿ytkownika poprzez komunikat na wyjœciu.
+ * Uzyskane wyniki, sï¿½ porï¿½wnywane z liczbami zawartymi w drugim pliku .txt.
+ * Odpowiadajï¿½ one poprawnym wynikom. Funkcja sprawdza czy wszystko siï¿½ zgadza, informujï¿½c  
+ * o rezultacie uï¿½ytkownika poprzez komunikat na wyjï¿½ciu.
  *
- * \return Zwraca 0, gdy wyniki uzyskane s¹ poprawne. W przeciwnym wypadku zwraca 1.
+ * \return Zwraca 0, gdy wyniki uzyskane sï¿½ poprawne. W przeciwnym wypadku zwraca 1.
  *          Gdy ilosci danych w tablicach sa rozne, zwraca -1.
  * 
  */   
@@ -185,7 +184,7 @@ Liczby::Liczby( int rozmiar){
 /*!
  *\brief  Wczytywanie liczb z pliku .txt
  * 
- * Funkcja wczytuje liczby z pliku .txt. Wykorzystywana zarówno przy wczytywaniu liczb do przemo¿enia
+ * Funkcja wczytuje liczby z pliku .txt. Wykorzystywana zarï¿½wno przy wczytywaniu liczb do przemoï¿½enia
  *, jak i do wczytywania liczb z pliku z poprawnymi wynikami.
  * 
  */ 
@@ -204,7 +203,7 @@ Liczby WczytajLiczby() {
      int wartosc;
    
     if( plik1.good() !=true ){
-		cout << " B³¹d otwarcia pliku "<<endl;
+		cout << " Bï¿½ï¿½d otwarcia pliku "<<endl;
 		return 1;
 	    }
 	 
@@ -259,17 +258,17 @@ int Liczby::WymnozLiczby(int razy){
 int Liczby::SprawdzWyniki(Liczby & wyniki){
 	
 	if(this->IloscLiczb()!=wyniki.IloscLiczb()){
-		 cout<<" Rozmiary wczytanych plików s¹ ró¿ne !" <<endl;
+		 cout<<" Rozmiary wczytanych plikï¿½w sï¿½ rï¿½ne !" <<endl;
 		 return -1;
 	}
 
 	for ( int i=0;i<=this->IloscLiczb();i++)
 	      if (this->Tablica(i)!=wyniki.Tablica(i)){
-	           cout<<" B³ad ! Dotyczy liczby nr : " << i <<endl;
+	           cout<<" Bï¿½ad ! Dotyczy liczby nr : " << i <<endl;
 	            return 1; } 
 	     
 	    
-	   cout << " Wyniki s¹ poprawne :) "<<endl;     
+	   cout << " Wyniki sï¿½ poprawne :) "<<endl;     
 	           
 	 return 0;          
 	
@@ -396,7 +395,7 @@ bool Liczby::operator ==  ( Liczby & L2) {
 	            return false; } 
 	     
 	    
-	   cout << " Wyniki s¹ poprawne :) "<<endl;  
+	   cout << " Wyniki sï¿½ poprawne :) "<<endl;  
 	 
 	 return true;
 }
