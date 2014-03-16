@@ -1,0 +1,231 @@
+
+#include "stdafx.h"
+#include <iostream>
+#include <cstdlib>
+#include <stddef.h>
+
+using namespace std;
+
+
+/* Szablon klasy Tablica */
+
+template <typename T> 
+class Tablica {
+
+	
+	T *  tab;
+	size_t rozmiar;
+
+public: 
+
+
+/* Konstruktor domyslny, inicjuje tablicę zerami	
+ *
+ */
+	Tablica(int ParametrDomyslny=0){   
+	  this->rozmiar=ParametrDomyslny;
+	  tab=new T[this->rozmiar];
+
+	  for(int i=0;i<this->rozmiar;i++){
+		  tab[i]=0;
+	  }
+
+	}
+	
+	
+/* Konstruktor kopiujacy */
+
+	Tablica( Tablica & Tab){  
+		this->rozmiar=Tab.rozmiar;
+	    this->tab = new T[rozmiar];
+		
+		for(int i=0;i<this->ZwrocRozmiar();i++){
+			 this->tab[i]=Tab[i];
+		}
+
+	}
+
+
+
+	/* Destruktor */
+
+	~Tablica () {                        
+		if(tab!=NULL) delete []tab;
+	}
+
+
+
+	const size_t ZwrocRozmiar() const {
+		return rozmiar;
+	}
+
+
+    T & operator [] ( size_t i){
+		return tab[i];  
+	}
+
+
+	const T & operator [] ( size_t i) const {
+		return tab[i];  
+	}
+
+
+	/* Operator przypisania L-wartosci */
+	Tablica & operator = ( const Tablica & argument){   
+		
+		rozmiar=argument.ZwrocRozmiar();
+		for(int i=0;i<argument.ZwrocRozmiar();i++){
+			 tab[i]=argument[i];
+		}
+
+		return *this;
+	}
+
+
+	
+ friend ostream& operator<< <> (ostream & StrmWy , const Tablica<T>  & Tab );
+ 
+ friend istream& operator<< <> (istream & StrmWe , Tablica<T>  & Tab );
+
+
+ /* Metoda zamienia zawartosci dwoch tablic,
+  * w procesie tym wykorzystywana jest tablica pomocnicza,
+  * tworzona dynamicznie.
+  */
+
+void ZamienZawartosc ( Tablica & T2){
+
+
+		T * tab_pomocnicza= new T[this->ZwrocRozmiar()];
+
+
+		for(int i=0;i<this->ZwrocRozmiar();i++){
+
+			tab_pomocnicza[i]=this->tab[i];
+		}
+
+		for(int i=0;i<this->ZwrocRozmiar();i++){
+
+			 this->tab[i]=T2[i];
+		}
+
+		for(int i=0;i<this->ZwrocRozmiar();i++){
+
+		      T2[i]=tab_pomocnicza[i];
+		}
+
+		delete [] tab_pomocnicza;
+
+	}
+
+
+
+/* Metoda dodaje nowy element do końca tablicy */
+
+   void push_back(T const & element){
+
+	   this->rozmiar++;
+	   T * tmp=new T[rozmiar];
+
+	   for( int i=0; i<(rozmiar-1);i++){
+		   tmp[i]=tab[i];
+	   }
+
+	   delete [] tab;
+	   tab= new T[rozmiar];
+
+	   for( int i=0; i<(rozmiar-1);i++){
+		   tab[i]=tmp[i];
+	   }
+
+	   delete [] tmp;
+	   tab[rozmiar-1]=element;
+
+   }
+
+
+   /* Metoda usuwa ostatni element tablicy */
+   void pop_back(){
+
+	   this->rozmiar--;
+	   T * tmp=new T[rozmiar];
+
+	   for(int i=0;i<rozmiar;i++){
+		   tmp[i]=tab[i];
+	   }
+
+	   delete []tab;
+       tab = new T[rozmiar];
+
+	   for(int i=0;i<rozmiar;i++){
+		   tab[i]=tmp[i];
+	   }
+
+	   delete [] tmp;
+	    
+   }
+
+
+
+   /* Zwraca wskaznik do pierwszego elementu tablicy */
+
+   T * begin(){
+
+	   return tab;
+   }
+
+  
+   /* Zwraca wskaznik za tablicę */
+
+   T * end(){
+
+	   return (tab+rozmiar);
+   }
+};
+
+
+/* Przeciazenie operatora strumieniowego << */
+
+  template <typename T>
+	ostream & operator << ( ostream & StrmWy , const Tablica<T>  & Tab ){
+
+		for( int i=0;i<Tab.ZwrocRozmiar();i++)
+			StrmWy<<Tab[i]<<endl;
+
+
+		return StrmWy;
+	}
+
+
+
+/* Przeciazenie operatora strumieniowego >> */
+
+	template <typename T>
+	istream & operator >> ( istream & StrmWe ,  Tablica<T>  & Tab ){
+
+		for( int i=0;i<Tab.ZwrocRozmiar();i++)
+			StrmWe>>Tab[i];
+
+
+		return StrmWe;
+	}
+
+
+
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+
+	
+    cout<<"START"<<endl;
+	Tablica<int> Tab(5);
+
+	/*
+
+    wowolania funkcji 
+	*/
+	
+	getchar();
+	getchar();
+	return 0;
+}
