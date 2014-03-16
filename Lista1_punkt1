@@ -1,0 +1,194 @@
+// lista1.cpp : Defines the entry point for the console application.
+//
+
+#include "stdafx.h"
+#include <stddef.h>
+#include <iostream>
+#include <fstream>
+
+
+using namespace std;
+
+
+/*   Funkcja alokuje dynamiczną tablicę zmiennych typu char o rozmiarze 
+ *   podanym w parametrze wywołania.
+ */
+char * UtworzTablice( std::size_t rozmiar){
+
+	char * tablica = new char[rozmiar];
+
+	for ( int i=0;i<rozmiar ; i++){
+     	tablica[i]='1';
+	}
+
+	return tablica;
+}
+
+/* Funkcja kopiuje tablicę do nowo utworzonej i zwraca wskaźnik do kopii
+ *
+ */
+
+char * SkopiujTablice ( char  * tab, std::size_t rozmiar ) {
+ 
+	char * kopia = new char[rozmiar];
+
+	for ( int i=0; i< rozmiar ; i++ ){
+
+		kopia[i]=tab[i];
+	}
+		
+		return kopia;
+}
+
+
+
+/* Funkcja zwalnia pamięc na którą wskazywał wskaźnik przekazany
+* w parametrze wywołania
+ */ 
+
+void ZwolnijPamiec ( char * tab){
+
+	delete [] tab;
+
+}
+
+
+
+/* Funkcja zmienia rozmiar tablicy dynamicznej przekazanej w parametrze wywołania,
+* w przypadku jej zwiększenia, dodane pola ustawiane są na wartość 0.
+* O ile ma zmienić się jej rozmiar decyduje wartość zmiennej rozmiar, 
+* przekazywanej jako parametr wywołania funkcji.
+*/
+
+char * ZmienRozmiar ( char * tab,std::size_t  rozmiar) {
+
+	int o_ile=13;
+
+	if( o_ile >= 0 ) {
+
+		char * nowa_tablica = new char[rozmiar+o_ile];
+
+        for( int i=0;i<rozmiar; i++ ) {
+
+			nowa_tablica[i]=tab[i];
+		}
+
+		for(int i=rozmiar;i<(rozmiar+o_ile);i++){
+			nowa_tablica[i]='0';
+		}
+		
+		delete [] tab;
+		return nowa_tablica;
+
+	}
+
+  if ( o_ile <0){
+	  
+	  char * nowa_tablica = new char[rozmiar+o_ile];
+	  int nowy_rozmiar=(rozmiar+o_ile);
+
+	      for( int i=0;i<nowy_rozmiar; i++ ) {
+
+			nowa_tablica[i]=tab[i];
+		}
+
+	    delete [] tab;
+		return nowa_tablica;
+
+  }
+
+}
+
+
+/* Funkcja wczytuje tablicę ze strumienia tekstowego << istream.
+ * Wcześniej musi być określony jej rozmiar, zwaracany jest wskaźnik 
+ * do wczytanej tablicy.
+ */
+
+char * 	Wczytaj ( size_t rozmiar, std::istream & in){
+	
+	char * wczytana= new char[rozmiar];
+
+	for(int i=0; i<rozmiar ; i++){
+
+		in>>wczytana[i];
+
+	}
+
+	cout<<"%%%%"<<endl;
+
+ for(int i=0; i<rozmiar ; i++){
+
+		cout<<wczytana[i];
+
+	}
+ cout<<"%%%%"<<endl;
+
+ return wczytana;
+}
+
+
+
+
+/*
+ * Funkcja zapisuje tablicę do strumienia tekstowego << ostream. 
+ * Podany jest jej rozmiar, oraz wskaźnik do pierwszego elementu.
+  */
+
+void Zapisz ( char * tab , size_t rozmiar , std::ostream & out ){ 
+
+	for ( int i=0; i< rozmiar ; i++){
+
+		out<<tab[i]<<endl;
+
+	}
+
+}
+
+
+
+
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+	std::size_t rozmiar=5;
+/*
+	char * tab=UtworzTablice(rozmiar);
+	
+
+	for ( int i=0;i<rozmiar ; i++){
+
+		cout<<tab[i]<<endl;
+	}
+	*/
+/*
+	char * kopia=SkopiujTablice(tab, rozmiar);
+	
+     ZwolnijPamiec(kopia);
+     cout<<kopia[4]; */  //nie wyswietli, bo zwolniono pamiec 
+
+	//char * nowa=ZmienRozmiar(tab,rozmiar);
+	//cout<<nowa[10];
+
+
+
+	/*
+	fstream plik;
+	plik.open("dane.txt");
+	if(  plik.is_open() ) cout<<"Otwarto plik z danymi"<<endl;
+	char * wczytana=Wczytaj (3, plik);
+	
+
+ 
+	fstream plik2;
+	plik2.open("zapis.txt");
+	if(  plik2.is_open() ) cout<<"Otwarto plik do zapisu danych"<<endl;
+	Zapisz(wczytana,3, plik2);
+	*/
+	
+	getchar();
+	getchar();
+
+	return 0;
+}
+
