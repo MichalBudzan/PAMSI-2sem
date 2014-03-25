@@ -1,0 +1,157 @@
+/ Kopiec_budzi.cpp : Defines the entry point for the console application.
+//
+
+#include "stdafx.h"
+#include <stddef.h>
+#include <iostream>
+#include <algorithm>
+
+
+using namespace std;
+
+
+template <typename T>
+class Kopiec {
+
+	T * tab;
+	size_t rozmiar;  // powiedzmy ze 5
+
+public:
+
+
+
+
+	Kopiec ( T wartosc=0){
+
+		this->rozmiar=5;  // robimy 5 elementow 
+		tab= new T[this->rozmiar];
+		tab[0]=0;
+		tab[1]=3;
+		tab[2]=0;
+		tab[3]=2;
+		tab[4]=1;
+
+	}
+
+
+
+	T & operator [] ( size_t i){
+		return tab[i];
+      }
+
+
+	 
+void push_back(T const & element){
+
+        this->rozmiar++;
+         T * tmp=new T[rozmiar];
+
+        for(int i=0; i<(rozmiar-1);i++)
+              tmp[i]=tab[i];
+            
+		tmp[rozmiar-1]=element;
+		tab=tmp;
+   }
+
+
+
+
+void Wyswietl (){
+
+	cout<<"~~~~~~"<<endl;
+	for ( int i=0; i<rozmiar;i++)
+		cout<<tab[i]<<endl;
+
+}
+
+
+
+
+T Zwroc_Rodzica ( const int dziecko){
+
+	int rodzic=(dziecko-1)/2;
+
+	return tab[rodzic];
+
+
+}
+
+
+
+int Zwroc_Indeks_Lewego_Dziecka ( const int rodzic){
+
+	int dziecko_l=(rodzic*2+1);
+
+	if(dziecko_l>=this->rozmiar){
+		cout<<" Brak dziecka "<<endl;
+		return -1;  }
+
+	return dziecko_l;
+}
+
+
+int Zwroc_Indeks_Prawego_Dziecka ( const int rodzic){
+
+	int dziecko_p=(rodzic*2+2);
+
+	if(dziecko_p>=this->rozmiar){ 
+		 cout<<" Nie ma prawego dziecka"<<endl;
+		 return -1;
+	}
+
+	return dziecko_p;
+}
+
+
+
+void Swap (const int ind1, const int ind2){
+
+	T val;
+	val=tab[ind1];
+	tab[ind1]=tab[ind2];
+	tab[ind2]=val;
+
+}
+
+
+
+void Przywroc_Wlasnosc_W_Dol( const int index){
+
+	int dziecko_l=this->Zwroc_Indeks_Lewego_Dziecka(index);
+	int dziecko_p=this->Zwroc_Indeks_Prawego_Dziecka(index);
+
+	if(tab[index]>tab[dziecko_l]){
+		 if(tab[dziecko_l]>=tab[dziecko_p]){
+			      Swap(tab[index],tab[dziecko_p]);    
+		 }
+		 else {
+			 Swap(tab[index],tab[dziecko_l]);   }
+
+
+	}
+
+	else if ( tab[index]>
+
+
+}
+
+};
+
+
+
+
+
+
+int _tmain(int argc, _TCHAR* argv[]){
+
+	Kopiec<int> K;
+
+	K.Wyswietl();
+	
+	K.Przywroc_Wlasnosc_W_Dol(1);
+
+	K.Wyswietl();
+
+	getchar();
+	return 0;
+}
