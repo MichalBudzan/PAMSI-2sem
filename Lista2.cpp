@@ -1,3 +1,7 @@
+
+
+
+
 // lista2.cpp : Defines the entry point for the console application.
 //    MICHAŁ BUDZAN    200294       LISTA 2      ZADANIA LABORATORIUM PAMSI 
 
@@ -39,7 +43,7 @@ public :
 	///////// PUNKT 2 //////// 
 	
 	
-	class Iterator {      // szablok klasy Iterator  
+	class Iterator {      // szablon klasy Iterator  
 
 	        public :
 			Node * wsk;
@@ -84,6 +88,12 @@ public :
 
 	bool Czy_Wezel_Rozlaczony(Node * wezel){      // metoda sprawdza, czy wezel jest rozlaczony 
 		
+			if(Lista_Is_Empty()){
+         cout<<"Lista jest pusta !"<<endl;
+		 return;
+	}
+
+
 		if(wezel->next==wezel && wezel->prev==wezel){
 			cout<<" Wezel jest rozlaczony"<<endl;
 			return true;
@@ -95,6 +105,12 @@ public :
 
 	bool Czy_Wezel_Prawidlowo_Polaczony(Node * wezel){    // metoda sprawdza czy wezel jest prawidlowo podlaczony
 		
+			if(Lista_Is_Empty()){
+         cout<<"Lista jest pusta !"<<endl;
+		 return false;
+         	}
+
+
 		if(wezel==poczatek_listy.wsk){   // jezeli to pierwszy wezel w liscie
 			if(wezel->prev==wezel && wezel->next!=wezel && wezel->next!=NULL){
 				return true;
@@ -119,7 +135,12 @@ public :
 
 
   // metoda wstawia wezel za ostatnim, ktory jest podany jako parametr wywolania
-  void  Wstaw_Wezel_Za_Ostatnim ( Node * ostatni, Node * nowy){   
+  void  Wstaw_Wezel_Za_Ostatnim ( Node * ostatni, Node * nowy){  
+
+	  	if(Lista_Is_Empty()){
+         cout<<"Lista jest pusta !"<<endl;
+		 return;
+	}
 
 	  ostatni->next=nowy;
 	  nowy->prev=ostatni;
@@ -134,6 +155,10 @@ public :
   // Metoda wstawia wezel przed pierwszym, podanym jako parametr jej wywolania
   void Wstaw_Wezel_Przed_Pierwszym ( Node * pierwszy, Node * nowy){
 
+	  	if(Lista_Is_Empty()){
+         cout<<"Lista jest pusta !"<<endl;
+		 return;
+	}
 
 	pierwszy->prev=nowy;
 	nowy->next=pierwszy;
@@ -148,6 +173,10 @@ public :
   // Metodaw wstawia wezel przed pozycje wskazywana przez iterator, podany jako parametr jej wywolania
   void Wstaw_Przed_Pozycje ( Iterator pozycja, Node * nowy){    
 
+	  	if(Lista_Is_Empty()){
+         cout<<"Lista jest pusta !"<<endl;
+		 return;
+	}
 
 	if(pozycja.wsk==poczatek_listy.wsk){                   // zabezpieczenie gdy wstawiamy przed pierwszym
 		Wstaw_Wezel_Przed_Pierwszym ( pozycja.wsk,nowy);
@@ -167,6 +196,10 @@ public :
   // Metoda odlacza od listy wezel, wskazywany przez iterator
   void Odlacz_Wezel ( Iterator iter){    
 	 
+	  	if(Lista_Is_Empty()){
+         cout<<"Lista jest pusta !"<<endl;
+		 return;
+	}
 
 	Iterator poprzedni = Prev(iter);
 	Iterator nastepny = Next(iter);
@@ -200,10 +233,22 @@ public :
 
 
 
-    // Konstruktor obiektu klasy Lista, przyjmuje jako parametr wartosc pierwszego wezla
-    // Wskazniki na nastepny oraz poprzedni wezel sa ustawiane na sam wezel. 
-    // Do pola rozmiar zostaje przypisana wartosc 1. 
-	Lista(T wartosc){
+ // Konstruktor bezparametryczny 
+	Lista(){
+	this->rozmiar=0;
+	} 
+	
+
+	bool Lista_Is_Empty(){
+		if(rozmiar==0)
+			return true;
+		else
+			return false;
+	}
+
+
+
+	Lista(T wartosc) {   // konstruktor parametryczny 
 	Node * nowy = new Node;
 	nowy->next = nowy;
 	nowy->prev = nowy;
@@ -249,6 +294,7 @@ public :
 // Sluzy do dodawania kolejnym wezlow podczas kopiowania listy.
 void  Przekopiuj_Wezel ( Node * ostatni, Node * nowy){   
 
+	  
 
 	  ostatni->next=nowy;
 	  nowy->prev=ostatni;
@@ -296,6 +342,8 @@ Lista & operator = ( const Lista & L){
 // Metoda wstawia element o podanej w parametrze jej wywolania wartosci na poczatek listy
 void push_front( T const &  wartosc){
 
+
+
 	Node * pierwszy = poczatek_listy.wsk; 
 	Node * nowy = new Node;
 	nowy->val=wartosc; 
@@ -327,6 +375,11 @@ void push_back( T const &  wartosc){
 // Metoda usuwa pierwszy element listy
 void pop_front (){
 
+		if(Lista_Is_Empty()){
+         cout<<"Lista jest pusta !"<<endl;
+		 return;
+	}
+
 	Iterator iter=poczatek_listy;
 	poczatek_listy=Next(poczatek_listy);
 	delete iter.wsk;
@@ -337,6 +390,11 @@ void pop_front (){
 
 // Metoda usuwa ostatni element listy
 void pop_back(){
+
+		if(Lista_Is_Empty()){
+         cout<<"Lista jest pusta !"<<endl;
+		 return;
+	}  
 
 	Iterator iter=koniec_listy;
 	koniec_listy=Prev(koniec_listy);
