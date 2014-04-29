@@ -1,3 +1,4 @@
+
 // Sortowania.cpp : Defines the entry point for the console application.
 //
 
@@ -57,31 +58,41 @@ void Sortowanie_Szybkie(std::vector<T> & d, int lewy, int prawy){   // lewy - 0 
 
 
 
+//////////////////
 
 template <typename T>
-void MergeSort(std::vector<T> & d,int i_p, int i_k) // scalanie
-{
-  int i_s,i1,i2,i;
-  
-  int p[1000000];                   // tablica pomocnicza wykorzystywana przy scalaniu                         
+void Scal(std::vector<T> & dane, int rozmiar, int poczatek, int srodek, int koniec) {
 
+	T * temp=new T[rozmiar];
+	for (int i = poczatek; i <= koniec; i++) temp[i] = dane[i];  // Skopiowanie danych do tablicy pomocniczej
 
-  i_s = (i_p + i_k + 1) / 2;        // znajdujemy srodek tabeli 
-
-  if(i_s - i_p > 1) MergeSort(d,i_p, i_s - 1);   // podzial na dwuelementowe tablice 
-  if(i_k - i_s > 0) MergeSort(d,i_s, i_k);  
-
-	i1 = i_p;            // i1,i2 to indeksy pomocnicze dla dwuelemenentowych tablic, ktore beda sortowane
-	i2 = i_s;
-  for(i = i_p; i <= i_k; i++)
-    p[i] = ( (i1 == i_s) || ((i2 <= i_k) && (d[i1] > d[i2])) ) ? d[i2++] : d[i1++];  // sortowanie dwuelementowych tablic
-  for(i = i_p; i <= i_k; i++) d[i] = p[i];   // przepisanie z tablicy pomocniczej do glownej posortowanych tablic 
+	int p = poczatek;
+	int s = srodek + 1;
+	int k = poczatek;                 // Ustawienie wskaźników tablic
+	while (p <= srodek && s <= koniec) {         // Przenoszenie danych z sortowaniem ze zbiorów pomocniczych do tablicy głównej
+		if (temp[p]<temp[s]) dane[k++] = temp[p++];
+		else dane[k++] = temp[s++];
+	}
+	while (p <= srodek)	dane[k++] = temp[p++]; // Przeniesienie nie skopiowanych danych ze zbioru pierwszego w przypadku, gdy drugi zbiór się skończył
 }
 
 
+/* Procedura sortowania tab[pocz...kon] */
+template <typename T>
+void Sortowanie_Scalanie(std::vector<T> & dane, int rozmiar, int pocz, int kon) {
+	int srodek;
+	int poczatek = pocz;
+	int koniec = kon;
+	if (poczatek<koniec) {
+		srodek = (poczatek + koniec) / 2;
+		Sortowanie_Scalanie(dane, rozmiar, poczatek, srodek);    // Dzielenie lewej części
+		Sortowanie_Scalanie(dane, rozmiar, srodek + 1, koniec);   // Dzielenie prawej części
+		Scal(dane, rozmiar, poczatek, srodek, koniec);   // Łączenie części lewej i prawej
+	}
+}
 
 
-
+/////////////////////////
 
 
 ///////////////
@@ -115,11 +126,7 @@ int main()
 {
 	std::vector<int> dane;
 
-	cout<"~~~"<<endl;
-	int zm=1;
-	zm= ( zm<<1) ;
-	cout<"~~~"<<endl;
-    cout<<zm<<endl;
+	
 
     srand(unsigned(time(NULL)));
 	 
@@ -140,7 +147,7 @@ int main()
 
   for(int i=0; i < 11 ; i++) {
 
-      for( size_t i = 0; i <16384 ;i++ )
+      for( size_t i = 0; i <1024 ;i++ )
               dane.push_back(rand());
 
   
@@ -148,8 +155,11 @@ int main()
      StartCounter(); // rozpoczynamy pomiar
 
 	 //Sortowanie_Przez_Wstawianie(dane);
-        Sortowanie_Szybkie(dane,0,dane.size()-1);
-		   //  MergeSort(dane,0,dane.size()-1);
+        //Sortowanie_Szybkie(dane,0,dane.size()-1);
+
+	     Sortowanie_Scalanie(dane,dane.size(),0,dane.size()-1);
+
+		     
 	 
 		double time=GetCounter();
   
@@ -162,8 +172,13 @@ int main()
 	    plik.close();
     }
 
-	 for( size_t i = 0; i < 10;i++ )
+	 for( size_t i = 0; i < 30;i++ )
            cout<<dane[i]<<endl;
+
+	 cout<<"~~~"<<endl;
+
+	 for ( size_t i=1000; i<1020 ; i++)
+		   cout<<dane[i]<<endl;
 
 
 getchar();
