@@ -1,0 +1,349 @@
+// Prim.cpp.cpp : Defines the entry point for the console application.
+//
+
+#include "stdafx.h"
+#include <iostream>
+#include <fstream>
+#include <list>
+#include <ctime>
+#include <cstdlib>
+#include <vector>
+
+using namespace std;
+
+class Krawedz {
+
+public :
+	 int u,v,waga;
+
+	 	void Wyswietl_Krawedz(){
+		cout<< u << "-" <<v<<"  "<<waga<<endl;
+	}
+
+
+};
+
+template <typename Krawedz>
+void Wyswietl_Liste_Krawedzi ( std::list<Krawedz> & L ){
+
+	for( std::list<Krawedz>::iterator it=L.begin() ; it!=L.end(); ++it)
+		  it->Wyswietl_Krawedz();
+	
+	cout<<"~~~~~~~~~~~"<<endl;
+}
+
+
+//////////////////////////////////////////
+struct TNode
+{
+  TNode * next;
+  int v,waga;
+
+};
+
+class MSTree{
+  private:
+    TNode ** A;                   // Tablica list sąsiedztwa
+    int Alen;                     // Liczba komórek w tablicy
+  public:
+    MSTree(int n);
+    ~MSTree();
+    void Dodaj_Krawedz(Krawedz & K);
+    TNode * Zwroc_Sasiadow(int n);
+    void print();
+};
+ 
+
+//////////////////////////////
+
+MSTree::MSTree(int n){
+  int i;
+
+  A = new TNode * [n];            // Tworzymy tablicę dynamiczną
+  for(i = 0; i < n; i++) A[i] = NULL; // i wypełniamy ją pustymi listami
+  Alen = n - 1;                   // Zapamiętujemy długość tablicy
+}
+
+
+// Destruktor - usuwa listy oraz tablicę sąsiedztwa
+//------------------------------- ------------------
+MSTree::~MSTree(){
+  int i;
+  TNode *p,*r;
+
+  for(i = 0; i <= Alen; i++)
+  {
+    p = A[i];
+    while(p)
+    {
+      r = p;                      // Zapamiętujemy wskazanie
+      p = p->next;                // Przesuwamy się do następnego elementu listy
+      delete r;                   // Usuwamy element
+    }
+  }
+
+  delete [] A;                    // Usuwamy tablicę list sąsiedztwa
+}
+
+
+// Dodaje krawędź do drzewa
+//-------------------------
+void MSTree::Dodaj_Krawedz( Krawedz & K){
+
+  TNode *p;
+
+  p = new TNode;                   // Tworzymy nowy węzeł
+  p->v = K.v;                     // Wierzchołek końcowy
+  p->waga = K.waga;              // Waga krawędzi
+  p->next = A[K.u];             // Dodajemy p do listy wierzchołka v1
+  A[K.u] = p;
+
+  p = new TNode;                  // To samo dla krawędzi odwrotnej
+  p->v = K.u;                    // Wierzchołek końcowy
+  p->waga = K.waga;           // Waga krawędzi
+  p->next = A[K.v];              // Dodajemy p do listy wierzchołka v2
+  A[K.v] = p;
+}
+
+
+// Zwraca wskaźnik początku listy sąsiadów wierzchołka
+//----------------------------------------------------
+TNode * MSTree::Zwroc_Sasiadow( int n){
+  return A[n];
+}
+
+
+
+void MSTree::print()
+{
+  int i;
+  TNode *p;
+
+  cout << endl;
+  for(i = 0; i <= Alen; i++)
+  {
+    cout << "Wierzcholek nr  " << i << " - ";
+    for(p = A[i]; p; p = p->next) cout << p->v << ":" << p->waga << " ";
+    cout << endl;
+  }
+
+}
+
+
+
+
+/////////////////////////////
+
+bool compare_nocase ( Krawedz & K1, Krawedz & K2){
+
+	if(K1.waga>=K2.waga) return false;
+	return true;
+
+}
+
+
+template <typename Krawedz>
+void Posortuj_Liste_Krawedzi ( std::list<Krawedz> & L ){   
+
+	L.sort(compare_nocase);
+
+}
+
+template <typename Krawedz>
+bool Sprawdz_Czy_Juz_Jest_Polaczenie(std::list<Krawedz> & L, int v1, int v2){
+
+
+	for( std::list<Krawedz>::iterator it=L.begin() ; it!=L.end(); ++it)
+		   if( (it->u==v1 && it->v==v2 ) ||  ( it->u==v2 && it->v==v1) )
+			      return true;
+
+	return false;
+	
+
+
+}
+
+
+
+////////////////////////////////////////////
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+
+
+    srand (time(NULL));
+
+	int n,m;  // n -wierzcholki, m - krawedzie
+
+	std::list<Krawedz> Lista_Krawedzi;   // kolejka priorytetowa z lista krawedzi
+
+	Krawedz K;  //  bedziemy wczytywac do niej kolejene polaczenia grafu 
+
+	TNode * p;   // wskaznik na wierzcholek
+
+
+   int decyzja;
+   cout<<" Dane z klawiatury -> wybierz - 0 \n Dane z pliku -> wybierz - 1 \n Losuje graf o zadanej wielkosci -> wybierz 2 "<<endl;
+   cin>>decyzja;
+
+   if(decyzja==1){
+
+			 fstream plik;
+			 plik.open( "plik.txt");
+
+	    if(!(plik.good()==true)){
+            cout<<"Nie Otwarto pliku z danymi !"<<endl;
+			return 0; }
+
+		plik>>n;
+		plik>>m;
+
+	
+
+	  for(int i=0; i<m ; i++){      
+		plik>>K.u;
+		plik>>K.v;
+		plik>>K.waga;
+		Lista_Krawedzi.push_back(K);
+	} 
+		
+	  cout<< "Wczytano dane z pliku "<<endl;
+
+   }
+
+
+
+
+   else if(decyzja==0){   // z klawiatury
+
+	cout<<" Podaj ilosc wierzchołkow : ";
+	cin>>n;
+
+	cout<<"Podaj ilosc krawedzi : ";
+	cin>>m;
+
+	cout<<" Podaj kolejne polaczenia miedzy wierzcholkami oraz ich wage "<<endl;
+
+	for(int i=0; i<m ; i++){      
+		cout<<"Wierzcholek 1 : ";
+		cin>>K.u;
+		cout<<"Wierzcholek 2 : ";
+		cin>>K.v;
+		cout<<" Waga polaczenia : ";
+		cin>>K.waga;
+		Lista_Krawedzi.push_back(K);
+	} 
+
+	cout<<"Wczytano graf"<<endl;
+   }
+
+
+
+
+
+
+
+   else if(decyzja==2){  ///////// LOSOWANIE GRAFU
+
+    cout<<"Podaj ilosc wierzcholkow :";
+	cin>>n;
+	m=0;
+	std::vector<int> S;   
+	std::vector<int> L;
+	int wx,wy,ind1,ind2;
+
+	S.push_back(0);  // 1-szy wrzucam do S
+
+	for(int i=1;i<n;i++)
+		L.push_back(i);    // pozostale do listy L
+
+	while( !L.empty() ){
+
+		do{   // nie laczymy dwoch takich samych wierzcholkow z samym soba np 1 z 1 
+		  ind1 = (rand() % S.size() );
+		  ind2 = ( rand() % L.size() );
+
+		  wy=S[ind1];
+		  wx=L[ind2];
+		}while(wy==wx);
+
+		  int los=( rand() % 2); // co 2 usuwam -> TUTAJ DECYZJA O GĘSTOSCI GRAFU
+		  if(los==0)
+		  L.erase(L.begin()+ind2);
+
+		  S.push_back(wx);
+
+		  K.u=wy;
+		  K.v=wx;
+		  K.waga=(rand()%5 +1);  // dlugosci od 1 do 5 losujemy
+
+		  if(!Sprawdz_Czy_Juz_Jest_Polaczenie(Lista_Krawedzi,wy,wx)){ // jesli dane polaczenie jeszcze nie istnieje, dodajemy je do listy
+		  Lista_Krawedzi.push_back(K);
+		  ++m;    // licznik krawedzi
+		  }
+	}
+
+	Wyswietl_Liste_Krawedzi(Lista_Krawedzi);
+
+
+   }
+
+
+
+
+   	
+	   MSTree T(n);                    // Minimalne drzewo rozpinające
+       MSTree G(n);                    // Graf
+
+	   for(int i=0;i<m;i++){
+         K=Lista_Krawedzi.front();
+		 Lista_Krawedzi.pop_front(); 
+         G.Dodaj_Krawedz(K); 
+	   }
+	
+	    cout<<"~~"<<endl;
+
+	bool * visited = new bool [n];     // tablica odwiedzin, informuje czy dany wierzcholek jest juz w drzewie
+
+	for(int i = 0; i < n; i++) 
+		 visited[i] = false;   
+
+
+	int v=0;  // wierzcholek startowy - NUMERUJEMY WIERZCHOLKI OD ZERA
+	visited[v]=true;
+
+	
+
+  for(int i = 1; i < n; i++)          // Do drzewa dodamy n - 1 krawędzi grafu
+ {
+    for(p = G.Zwroc_Sasiadow(v); p; p = p->next) // Przeglądamy listę sąsiadów
+      if(!visited[p->v])          // Jeśli sąsiad jest nieodwiedzony,
+      {
+        K.u = v;                 // to tworzymy krawędź
+        K.v = p->v;
+        K.waga = p->waga;
+		Lista_Krawedzi.push_back(K);                // Dodajemy ją do kolejki priorytetowej
+      }
+
+	  Posortuj_Liste_Krawedzi(Lista_Krawedzi);  // sortujemy wg najmniejszej wagi
+
+    do
+    {
+		K = Lista_Krawedzi.front();              // Pobieramy krawędź z kolejki o najmniejszej wadze
+		Lista_Krawedzi.pop_front();
+    }while(visited[K.v]);             // Krawędź jest poza drzewem, wtedy konczymy petle, mamy dostep do najblizszego saasiada
+
+    T.Dodaj_Krawedz(K);                 // Dodajemy krawędź do drzewa rozpinającego
+    visited[K.v] = true;              // Oznaczamy drugi wierzchołek jako odwiedzony
+    v = K.v;      
+  }
+
+  T.print();
+
+  delete [] visited;
+
+    getchar();
+	getchar();
+	return 0;
+}
+
